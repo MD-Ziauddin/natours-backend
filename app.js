@@ -14,7 +14,6 @@ const __dirname = path.resolve();
 dotenv.config({ path: './config.env' });
 
 // MIDDLEWARE
-console.log(process.env.NODE_ENV);
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
