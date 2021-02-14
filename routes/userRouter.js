@@ -8,12 +8,14 @@ import {
   deleteUser,
   updateMe,
   deleteMe,
+  getMe,
 } from '../controllers/userController.js';
 import {
   signUp,
   login,
   updatePassword,
   protect,
+  restrictTo,
 } from '../controllers/authController.js';
 
 export const userRouter = express.Router();
@@ -21,9 +23,14 @@ export const userRouter = express.Router();
 userRouter.post('/signup', signUp);
 userRouter.post('/login', login);
 
-userRouter.patch('/updateMyPassword', protect, updatePassword);
-userRouter.patch('/updateMe', protect, updateMe);
-userRouter.delete('/deleteMe', protect, deleteMe);
+userRouter.use(protect);
+
+userRouter.patch('/updateMyPassword', updatePassword);
+userRouter.patch('/updateMe', updateMe);
+userRouter.delete('/deleteMe', deleteMe);
+userRouter.get('/me', getMe, getUser);
+
+userRouter.use(restrictTo('admin'));
 
 userRouter.route('/').get(getAllUser).post(createUser);
 userRouter.route('/:id').get(getUser).patch(updateUser).delete(deleteUser);

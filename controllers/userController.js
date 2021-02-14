@@ -11,6 +11,11 @@ const filterObj = (obj, ...allowedFileds) => {
   return newObj;
 };
 
+export const getMe = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
+
 export const getAllUser = catchAsync(async (req, res) => {
   const users = await User.find();
 
@@ -51,12 +56,16 @@ export const deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not defined',
+export const getUser = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  res.status(200).json({
+    status: 'Success',
+    data: {
+      user,
+    },
   });
-};
+});
 
 export const createUser = (req, res) => {
   res.status(500).json({
