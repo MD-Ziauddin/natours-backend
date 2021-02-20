@@ -18,7 +18,7 @@ const createSendToken = (user, statusCode, res) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    httpOnly: true,
+    httpOnly: false,
   };
 
   if (process.env.NODE_ENV.trim() === 'prodction') cookieOptions.secure = true;
@@ -61,6 +61,17 @@ export const login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+export const logout = (req, res) => {
+  res.cookie('jwt', 'logOut', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+
+  res.status(200).json({
+    status: 'Success',
+  });
+};
+
 export const protect = catchAsync(async (req, rest, next) => {
   let token;
   if (
@@ -68,6 +79,8 @@ export const protect = catchAsync(async (req, rest, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token) {

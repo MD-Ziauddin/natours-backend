@@ -13,6 +13,7 @@ import {
 import {
   signUp,
   login,
+  logout,
   updatePassword,
   protect,
   restrictTo,
@@ -22,6 +23,7 @@ export const userRouter = express.Router();
 
 userRouter.post('/signup', signUp);
 userRouter.post('/login', login);
+userRouter.get('/logout', logout);
 
 userRouter.use(protect);
 

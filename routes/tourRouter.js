@@ -19,7 +19,7 @@ tourRouter.route('/top-5-cheap').get(aliasTopTours, getAllTours);
 
 tourRouter
   .route('/')
-  .get(getAllTours)
+  .get(protect, getAllTours)
   .post(protect, restrictTo('admin', 'lead-guide'), createTour);
 tourRouter
   .route('/:id')

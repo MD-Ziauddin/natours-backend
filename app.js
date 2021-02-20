@@ -8,6 +8,8 @@ import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import hpp from 'hpp';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import AppError from './utils/appError.js';
 import globalErrorHandler from './controllers/errorController.js';
@@ -23,6 +25,12 @@ dotenv.config({ path: './config.env' });
 
 // MIDDLEWARE
 app.use(helmet());
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -35,12 +43,13 @@ const limiter = rateLimit({
   message: 'Too many request from this IP, Please try again in an hour!',
 });
 
-app.use('/api', limiter);
+// app.use('/api', limiter);
 app.use(
   express.json({
     limit: '10kb',
   })
 );
+app.use(cookieParser());
 
 app.use(mongoSanitize());
 app.use(xss());
@@ -58,6 +67,12 @@ app.use(
 );
 
 app.use(express.static(`${__dirname}/public`));
+
+// This middleware for dev purpose
+app.use((req, res, next) => {
+  console.log('cookies', req.cookies);
+  next();
+});
 
 // ROUTES
 app.use('/api/v1/tours', tourRouter);
