@@ -27,7 +27,7 @@ dotenv.config({ path: './config.env' });
 app.use(helmet());
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: ['http://localhost:3000'],
     credentials: true,
   })
 );
@@ -70,7 +70,7 @@ app.use(express.static(`${__dirname}/public`));
 
 // This middleware for dev purpose
 app.use((req, res, next) => {
-  console.log('cookies', req.cookies);
+  //console.log('cookies', req.cookies);
   next();
 });
 
