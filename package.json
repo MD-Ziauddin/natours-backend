@@ -5,7 +5,8 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js",
     "start:prod": "set NODE_ENV=production && nodemon server.js"
   },
   "author": "MD ZIAUDDIN",
@@ -39,6 +40,6 @@
     "prettier": "^2.2.1"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": "^14"
   }
 }
